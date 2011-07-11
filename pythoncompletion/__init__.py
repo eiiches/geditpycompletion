@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 # Copyright (C) 2008 Michael Mc Donnell
+# Copyright (C) 2011 Eiichi Sato
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -14,8 +17,6 @@
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
+import pythoncompletion
+from pythoncompletion import PythonCompletion
 
-"""Load the python code completion plugin"""
-
-import pythoncodecompletion
-from pythoncodecompletion import CompletionPlugin

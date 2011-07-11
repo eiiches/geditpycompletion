@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+
 # Copyright (C) 2006 Aaron Griffin
 # Copyright (C) 2008 Rodrigo Pinheiro Marques de Araujo
+# Copyright (C) 2011 Eiichi Sato
 #
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -14,8 +17,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-
-
 
 import sys, tokenize, cStringIO, types
 from token import NAME, DEDENT, NEWLINE, STRING
@@ -67,7 +68,7 @@ class Completer(object):
         if type(func_obj) == types.ClassType: func_obj = _ctor(func_obj)
         elif type(func_obj) == types.MethodType: func_obj = func_obj.im_func
         else: arg_offset = 0
-        
+
         arg_text=''
         if type(func_obj) in [types.FunctionType, types.LambdaType]:
             try:
@@ -271,7 +272,7 @@ class Function(Scope):
         f = Function(self.name,self.params,indent)
         f.docstr = self.docstr
         f.locals = self.locals
-        return f 
+        return f
     def get_code(self):
         str = "%sdef %s(%s):\n" % \
             (self.currentindent(),self.name,','.join(self.params))
@@ -369,7 +370,7 @@ class PyParser:
     def _parseassignment(self):
         assign=''
         tokentype, token, indent = self.next()
-        if tokentype == tokenize.STRING or token == 'str':  
+        if tokentype == tokenize.STRING or token == 'str':
             return '""'
         elif token == '(' or token == 'tuple':
             return '()'
@@ -467,7 +468,7 @@ class PyParser:
                         continue
                     freshscope = True
                     self.scope = self.scope.add(cls)
-                    
+
                 elif token == 'import':
                     imports = self._parseimportlist()
                     for mod, alias in imports:
@@ -490,7 +491,7 @@ class PyParser:
                     if freshscope: self.scope.doc(token)
                 elif tokentype == NAME:
                     self.lvalue = token
-                    name,token = self._parsedotname(token) 
+                    name,token = self._parsedotname(token)
                     if token == '=':
                         stmt = self._parseassignment()
                         if stmt != None:
@@ -516,3 +517,4 @@ def _sanitize(str):
     return val
 
 sys.path.extend(['.','..'])
+
