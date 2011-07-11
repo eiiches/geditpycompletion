@@ -28,7 +28,8 @@ class CompletionProvider(gobject.GObject, gsv.CompletionProvider):
         self.name = name
 
     def do_match(self, context):
-        return True
+        return context.get_iter().get_buffer().get_mime_type() \
+                in ('text/x-python')
 
     def _get_incomplete_string(self, context, charsallowed='_'):
         insert = context.get_iter()
