@@ -60,7 +60,13 @@ class CompletionProvider(gobject.GObject, gsv.CompletionProvider):
             return a['abbr'] > b['abbr']
 
         def makeitem(item):
-            result = gsv.CompletionItem(item['abbr'], item['abbr'])
+            # discard chars after opening parenthesis
+            tmp = item['abbr'].split('(')
+            if len(tmp) == 1: tmp = tmp[0]
+            elif len(tmp) == 2 and tmp[1] == ')': tmp = tmp[0] + '()'
+            else: tmp = tmp[0] + '('
+
+            result = gsv.CompletionItem(item['abbr'], tmp)
             result.set_property('info', item['info'])
             return result
 
@@ -70,10 +76,7 @@ class CompletionProvider(gobject.GObject, gsv.CompletionProvider):
 
     def do_populate(self, context):
         proposals = self.do_get_proposals(context)
-        if proposals:
-            context.add_proposals(self, proposals, True)
-        else:
-            context.add_proposals(self, [], True)
+        context.add_proposals(self, proposals if proposals else [], True)
 
     def do_get_activation(self):
         return gsv.COMPLETION_ACTIVATION_INTERACTIVE
