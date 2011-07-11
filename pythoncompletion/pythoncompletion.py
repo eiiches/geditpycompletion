@@ -59,7 +59,12 @@ class CompletionProvider(gobject.GObject, gsv.CompletionProvider):
             if b['abbr'].startswith('_'): return -1
             return a['abbr'] > b['abbr']
 
-        return [gsv.CompletionItem(item['abbr'], item['abbr']) \
+        def makeitem(item):
+            result = gsv.CompletionItem(item['abbr'], item['abbr'])
+            result.set_property('info', item['info'])
+            return result
+
+        return [makeitem(item) \
                 for item in sorted(completes, cmp=sortfunc) \
                 if item['abbr'].startswith(incomplete2)]
 
@@ -87,6 +92,7 @@ class PythonCompletion(gedit.Plugin):
     def on_view_added(self, window, view):
         self.providers[view] = CompletionProvider('Python Completion')
         view.get_completion().add_provider(self.providers[view])
+        view.get_completion().set_property('remember-info-visibility', True)
 
     def on_view_removed(self, window, view):
         view.get_completion().remove_provider(self.providers[view])
